@@ -1,3 +1,6 @@
+# 참고사이트
+https://daintree.tistory.com/16
+
 # (cluster)role and serviceaccount and (cluster)rolebinding
 
 ## 유형1
@@ -35,4 +38,58 @@ kubectl config set-credentials app-manager --client-key=app-manager.key --client
 kubectl config set-context app-manager --cluster=kubernetes --user=app-manager
 kubectl create clusterrole app-access --verb=create,list,get,update,delete --resource=deployment,pod,service
 kubectl create clusterrolebinding app-access-binding --clusterrole=app-access --user=app-manager
+```
+
+# node drain
+https://kubernetes.io/docs/tasks/administer-cluster/safely-drain-node/
+
+# cluster upgrade
+https://kubernetes.io/ko/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+1) 마스터 노드 drain
+2) 마스터 노드의 kubeadm 업그레이드
+3) 마스터 노드의 kubectl, kubelet 업그레이드
+4) 마스터 노드 uncordon
+5) 워커 노드 drain
+6) 워커 노드의 kubeadm 업그레이드
+7) 워커 노드의 kubectl, kubelet 업그레이드(kubectl이 없을 경우 kubelet만 업그레이드)
+8) 워커 노드 uncordon
+
+```
+kubectl drain controlplane --ingnore-demonsets
+apt update
+#업그레이드 가능한 kubeadm 버전 확인
+apt-cache madison kubeadm
+#kubeadm 업그레이드
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm=1.19.0-00 && \
+apt-mark hold kubeadm
+#컴포넌트 업그레이드 가능 버전 확인
+kubeadm version
+kubeadm upgrade plan
+sudo kubeadm upgrade apply v1.19.0
+#kubelet, kubectl 업그레이드
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=1.19.0-00 kubectl=1.19.0-00 && \
+apt-mark hold kubelet kubectl
+#kubelet 재시작
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+kubectl uncordon controlplane 
+
+
+kubectl drain node --ignore-daemonsets
+#kubeadm 업그레이드
+apt-mark unhold kubeadm && \
+apt-get update && apt-get install -y kubeadm=1.19.0-00 && \
+apt-mark hold kubeadm
+#노드 업그레이드
+kubeadm upgrade node
+#kubelet 및 kubectl 업그레이드
+apt-mark unhold kubelet kubectl && \
+apt-get update && apt-get install -y kubelet=1.19.0-00 kubectl=1.19.0-00 && \
+apt-mark hold kubelet kubectl
+#kubelet 재시작
+systemctl daemon-reload
+systemctl restart kubelet
+kubectl uncordon node
 ```
