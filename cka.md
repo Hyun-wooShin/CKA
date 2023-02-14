@@ -110,3 +110,7 @@ etcdctl snapshot restore --data-dir <data-dir-location> snapshotdb
 # Kubernetes NetworkPolicy
 https://kubernetes.io/docs/concepts/services-networking/network-policies/
 https://taemy-sw.tistory.com/9
+
+
+# ansible
+https://waspro.tistory.com/585
