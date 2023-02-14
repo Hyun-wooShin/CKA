@@ -113,3 +113,4 @@ https://taemy-sw.tistory.com/9
 
 # kuybespray로 설치
 https://www.whatwant.com/entry/Kubespray
+https://jerryljh.tistory.com/43
