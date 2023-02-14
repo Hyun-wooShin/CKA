@@ -93,3 +93,20 @@ systemctl daemon-reload
 systemctl restart kubelet
 kubectl uncordon node
 ```
+
+# ETCD Backup & Restore
+https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#backing-up-an-etcd-cluster
+https://velog.io/@khyup0629/K8S-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EC%84%A4%EC%B9%98-%EB%B0%8F-%EC%84%A4%EC%A0%95
+
+```
+ETCDCTL_API=3 etcdctl --endpoints=https://127.0.0.1:2379 \
+  --cacert=<trusted-ca-file> --cert=<cert-file> --key=<key-file> \
+  snapshot save <backup-file-location>
+
+export ETCDCTL_API=3
+etcdctl snapshot restore --data-dir <data-dir-location> snapshotdb
+```
+
+# Kubernetes NetworkPolicy
+https://kubernetes.io/docs/concepts/services-networking/network-policies/
+https://taemy-sw.tistory.com/9
